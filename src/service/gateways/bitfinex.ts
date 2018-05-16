@@ -6,6 +6,7 @@
 ///<reference path="../interfaces.ts"/>
 
 import Q = require("q");
+import https = require("https");
 import crypto = require("crypto");
 import request = require("request");
 import url = require("url");
@@ -19,6 +20,7 @@ import Interfaces = require("../interfaces");
 import moment = require("moment");
 import _ = require("lodash");
 import log from "../logging";
+
 var shortId = require("shortid");
 var Deque = require("collections/deque");
 
@@ -368,10 +370,12 @@ class BitfinexHttp {
 
     get = <T>(actionUrl: string, qs?: any): Q.Promise<Models.Timestamped<T>> => {
         const url = this._baseUrl + "/" + actionUrl;
+        const pool = new https.Agent({ keepAlive: true });
         var opts = {
             timeout: this._timeout,
             url: url,
             qs: qs || undefined,
+            agent: pool,
             method: "GET"
         };
 
@@ -399,6 +403,7 @@ class BitfinexHttp {
         var signature = crypto.createHmac("sha384", this._secret).update(payload).digest('hex');
 
         const url = this._baseUrl + "/" + actionUrl;
+        const pool = new https.Agent({ keepAlive: true });
         var opts: request.Options = {
             timeout: this._timeout,
             url: url,
@@ -407,6 +412,7 @@ class BitfinexHttp {
                 "X-BFX-PAYLOAD": payload,
                 "X-BFX-SIGNATURE": signature
             },
+            agent: pool,
             method: "POST"
         };
 
@@ -467,6 +473,7 @@ class BitfinexPositionGateway implements Interfaces.IPositionGateway {
 
     private onRefreshPositions = () => {
         this._http.post<{}, BitfinexPositionResponseItem[]>("balances", {}).then(res => {
+            this._log.info("position data is: ", res.data);
             _.forEach(_.filter(res.data, x => x.type === "exchange"), p => {
                 var amt = parseFloat(p.amount);
                 var cur = Models.toCurrency(p.currency);
