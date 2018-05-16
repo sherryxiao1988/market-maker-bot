@@ -1,6 +1,9 @@
 {
   "name": "tribeca",
   "version": "2.0.0",
+  "engines": {
+    "node": "9.6.0"
+  },
   "description": "A high frequency, market making cryptocurrency trading platform",
   "main": "Gruntfile.js",
   "directories": {
@@ -18,7 +21,7 @@
     "@types/express-serve-static-core": "^4.0.44",
     "@types/form-data": "0.0.33",
     "@types/jquery": "^2.0.41",
-    "@types/lodash": "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.62.tgz",
+    "@types/lodash": "4.14.108",
     "@types/mime": "0.0.29",
     "@types/mongodb": "^2.1.43",
     "@types/node": "^7.0.12",
@@ -56,13 +59,15 @@
     "shortid": "2.2.8",
     "socket.io": "^1.4.5",
     "socket.io-client": "1.7.3",
-    "typescript": "^2.4.1",
     "typings": "2.1.0",
     "utf-8-validate": "^1.2.1",
     "ws": "^1.0.1"
   },
   "devDependencies": {
-    "mocha": "3.2.0"
+    "forever": "0.15.3",
+    "grunt-cli": "1.2.0",
+    "mocha": "3.2.0",
+    "typescript": "2.8.3"
   },
   "scripts": {
     "test": "mocha"
