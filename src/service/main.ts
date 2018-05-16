@@ -168,7 +168,7 @@ const liveTradingSetup = () : SimulationClasses => {
     app.use(compression());
     app.use(express.static(path.join(__dirname, "admin")));
     
-    const webport = config.GetNumber("WebClientListenPort");
+    const webport = config.GetNumber("PORT") || 3000;
     http_server.listen(webport, () => mainLog.info('Listening to admins on *:', webport));
     
     const getExchange = (): Models.Exchange => {
